@@ -1,0 +1,21 @@
+# Environment Variables
+
+.idea/
+
+
+# temporal folder
+tmp/
+apifast/app/src/lib/tools/__pycache__/
+apifast/app/src/lib/mongodb/__pycache__/
+apifast/app/src/lib/gee/__pycache__/
+apifast/app/src/lib/gcloud/__pycache__/
+apifast/app/service/__pycache__/
+apifast/app/test/__pycache__/
+myapi/__pycache__/
+apifast/app/src/lib/tools/terramodels.py
+venv/
+
+## DO NOT Remove this LINES
+## Security set up for credentials management
+#apifast/app/src/lib/gcloud/terramodels.json
+# .env

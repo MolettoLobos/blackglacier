@@ -60,6 +60,12 @@ def add_cld_shdw_mask(img):
     # Add the final cloud-shadow mask to the image.
     return img_cloud_shadow.addBands(is_cld_shdw)
 
+def ndsi_col(img):
+    ndsi = img.normalizedDifference(['B3','B11']).rename('NDSI')
+    ndsi_mask = ndsi.gte(0.5).rename('NDSI_MASK')
+    img_ndsi = img.addBands(ndsi).addBands(ndsi_mask)
+    return img_ndsi
+
 def get_s2_sr_cld_col(aoi, start_date, end_date):
     # Import and filter S2 SR.
     s2_sr_col = (ee.ImageCollection('COPERNICUS/S2_SR')
@@ -81,8 +87,8 @@ def get_s2_sr_cld_col(aoi, start_date, end_date):
         })
     }))
 
-    image_cloudless = image_join.map(add_cloud_bands).map(add_shadow_bands).map(add_cld_shdw_mask)
-
+    image_cloudless = image_join.map(add_cloud_bands)\
+        .map(add_shadow_bands).map(add_cld_shdw_mask).map(ndsi_col)
     # Join the filtered s2cloudless collection to the SR collection by the 'system:index' property.
     return image_cloudless
 

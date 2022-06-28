@@ -63,7 +63,7 @@ def add_cld_shdw_mask(img):
 def ndsi_col(img):
     ndsi = img.normalizedDifference(['B3','B11']).rename('NDSI')
     ndsi_mask = ndsi.gte(0.5).rename('NDSI_MASK')
-    img_ndsi = img.addBands(ndsi).addBands(ndsi_mask)
+    img_ndsi = img.divide(1e4).clamp(0,1).addBands(ndsi).addBands(ndsi_mask).copyProperties(img)
     return img_ndsi
 
 def get_s2_sr_cld_col(aoi, start_date, end_date):

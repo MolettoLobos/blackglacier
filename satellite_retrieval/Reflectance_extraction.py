@@ -58,7 +58,7 @@ for i in range(0,n):
         geometry=Areas.olivares_zb).getInfo()
 
     dict_paloma_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_paloma_za_mean['B1'],
-        'B02':stats_paloma_za_mean['B2'],'B02':stats_paloma_za_mean['B3'],
+        'B02':stats_paloma_za_mean['B2'],'B03':stats_paloma_za_mean['B3'],
         'B04':stats_paloma_za_mean['B4'],'B05':stats_paloma_za_mean['B5'],
         'B06':stats_paloma_za_mean['B6'],'B07':stats_paloma_za_mean['B7'],
         'B08':stats_paloma_za_mean['B8'],'B8A':stats_paloma_za_mean['B8A'],
@@ -67,7 +67,7 @@ for i in range(0,n):
         'NDSI_MASK':stats_paloma_za_mean['NDSI_MASK'],'ID':'La Paloma ZA'}
 
     dict_paloma_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_paloma_zb_mean['B1'],
-                           'B02':stats_paloma_zb_mean['B2'],'B02':stats_paloma_zb_mean['B3'],
+                           'B02':stats_paloma_zb_mean['B2'],'B03':stats_paloma_zb_mean['B3'],
                            'B04':stats_paloma_zb_mean['B4'],'B05':stats_paloma_zb_mean['B5'],
                            'B06':stats_paloma_zb_mean['B6'],'B07':stats_paloma_zb_mean['B7'],
                            'B08':stats_paloma_zb_mean['B8'],'B8A':stats_paloma_zb_mean['B8A'],
@@ -76,7 +76,7 @@ for i in range(0,n):
                            'NDSI_MASK':stats_paloma_zb_mean['NDSI_MASK'],'ID':'La Paloma ZB'}
 
     dict_juncal_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_za_mean['B1'],
-                           'B02':stats_juncal_za_mean['B2'],'B02':stats_juncal_za_mean['B3'],
+                           'B02':stats_juncal_za_mean['B2'],'B03':stats_juncal_za_mean['B3'],
                            'B04':stats_juncal_za_mean['B4'],'B05':stats_juncal_za_mean['B5'],
                            'B06':stats_juncal_za_mean['B6'],'B07':stats_juncal_za_mean['B7'],
                            'B08':stats_juncal_za_mean['B8'],'B8A':stats_juncal_za_mean['B8A'],
@@ -85,7 +85,7 @@ for i in range(0,n):
                            'NDSI_MASK':stats_juncal_za_mean['NDSI_MASK'],'ID':'Juncal ZA'}
 
     dict_juncal_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_zb_mean['B1'],
-                           'B02':stats_juncal_zb_mean['B2'],'B02':stats_juncal_zb_mean['B3'],
+                           'B02':stats_juncal_zb_mean['B2'],'B03':stats_juncal_zb_mean['B3'],
                            'B04':stats_juncal_zb_mean['B4'],'B05':stats_juncal_zb_mean['B5'],
                            'B06':stats_juncal_zb_mean['B6'],'B07':stats_juncal_zb_mean['B7'],
                            'B08':stats_juncal_zb_mean['B8'],'B8A':stats_juncal_zb_mean['B8A'],
@@ -93,7 +93,7 @@ for i in range(0,n):
                            'B12':stats_juncal_zb_mean['B12'],'NDSI':stats_juncal_zb_mean['NDSI'],
                            'NDSI_MASK':stats_juncal_zb_mean['NDSI_MASK'],'ID':'Juncal ZB'}
     dict_olivares_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_olivares_za_mean['B1'],
-                           'B02':stats_olivares_za_mean['B2'],'B02':stats_olivares_za_mean['B3'],
+                           'B02':stats_olivares_za_mean['B2'],'B03':stats_olivares_za_mean['B3'],
                            'B04':stats_olivares_za_mean['B4'],'B05':stats_olivares_za_mean['B5'],
                            'B06':stats_olivares_za_mean['B6'],'B07':stats_olivares_za_mean['B7'],
                            'B08':stats_olivares_za_mean['B8'],'B8A':stats_olivares_za_mean['B8A'],
@@ -103,7 +103,7 @@ for i in range(0,n):
 
     dict_olivares_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,
                              'B01':stats_olivares_zb_mean['B1'],
-                       'B02':stats_olivares_zb_mean['B2'],'B02':stats_olivares_zb_mean['B3'],
+                       'B02':stats_olivares_zb_mean['B2'],'B03':stats_olivares_zb_mean['B3'],
                        'B04':stats_olivares_zb_mean['B4'],'B05':stats_olivares_zb_mean['B5'],
                        'B06':stats_olivares_zb_mean['B6'],'B07':stats_olivares_zb_mean['B7'],
                        'B08':stats_olivares_zb_mean['B8'],'B8A':stats_olivares_zb_mean['B8A'],
@@ -118,3 +118,5 @@ for i in range(0,n):
     df = df.append(dict_olivares_za_mean,ignore_index=True)
     df = df.append(dict_olivares_zb_mean,ignore_index=True)
     print(df)
+import os
+df.to_csv(os.getcwd()+'/Time_Series_BG.csv',index=False)

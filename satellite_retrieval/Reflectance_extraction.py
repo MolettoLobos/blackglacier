@@ -182,9 +182,9 @@ for i in range(0,n):
     path_gcloud_ndsimask = (
                 'raster/' + 'BLACK_GLACIER' + '/' + 'ANDES' + '/' + 'NDSI_MASK' + '/' + 'NDSI_MASK' + '_' + 'S2SR' +
                 '_' + MGRS_TILE + '_' + date_yyyymmdd )
-    batch_sr = export_image(S2_SR_img_reflectance.clip(aoi),path_gcloud_sr,aoi_export,10,'prod')
-    batch_ndsi = export_image(S2_SR_img_ndsi.clip(aoi), path_gcloud_ndsi, aoi_export, 10, 'prod')
-    batch_ndsimask = export_image(S2_SR_img_ndsi_mask.clip(aoi), path_gcloud_ndsi, aoi_export, 10, 'prod')
+    batch_sr = export_image(S2_SR_img_reflectance.multiply(10000).clip(aoi).int16(),path_gcloud_sr,aoi_export,10,'prod')
+    batch_ndsi = export_image(S2_SR_img_ndsi.clip(aoi).multiply(10000).clip(aoi).int16(), path_gcloud_ndsi, aoi_export, 10, 'prod')
+    batch_ndsimask = export_image(S2_SR_img_ndsi_mask.clip(aoi).int8(), path_gcloud_ndsi, aoi_export, 10, 'prod')
     batch_sr.start()
     batch_ndsi.start()
     batch_ndsimask.start()

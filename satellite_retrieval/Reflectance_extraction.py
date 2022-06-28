@@ -1,7 +1,7 @@
 import ee
 import pandas as pd
 from datetime import datetime
-
+import os
 from satellite_retrieval.cloudless import get_s2_sr_cld_col
 from areas.geometries import Areas
 
@@ -18,7 +18,7 @@ colList = collection.toList(n_img)
 n = colList.size().getInfo()
 #n=0
 df = pd.DataFrame(columns=['timestamp','ingestion_time','B01','B02','B03','B04','B05','B06','B07',
-                           'B08','B8A','B09','B11','B12','NDSI','CLOUD_COVER','ID'])
+                           'B08','B8A','B09','B11','B12','NDSI','CLOUD_COVER','ID','GRANULE_ID'])
 for i in range(0,n):
     print('percentage processed: '+str(round(  (i/n)*100,2)))
 
@@ -109,7 +109,8 @@ for i in range(0,n):
         'B08':stats_paloma_za_mean['B8'],'B8A':stats_paloma_za_mean['B8A'],
         'B09':stats_paloma_za_mean['B9'],'B11':stats_paloma_za_mean['B11'],
         'B12':stats_paloma_za_mean['B12'],'NDSI':stats_paloma_za_mean['NDSI'],
-        'NDSI_MASK':stats_paloma_za_mean['NDSI_MASK'],'ID':'La Paloma ZA'}
+        'NDSI_MASK':stats_paloma_za_mean['NDSI_MASK'],'CLOUD_COVER':stats_paloma_za_cloud_cover,'ID':'La Paloma ZA',
+                           'GRANULE_ID':MGRS_TILE}
 
     dict_paloma_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_paloma_zb_mean['B1'],
                            'B02':stats_paloma_zb_mean['B2'],'B03':stats_paloma_zb_mean['B3'],
@@ -118,7 +119,8 @@ for i in range(0,n):
                            'B08':stats_paloma_zb_mean['B8'],'B8A':stats_paloma_zb_mean['B8A'],
                            'B09':stats_paloma_zb_mean['B9'],'B11':stats_paloma_zb_mean['B11'],
                            'B12':stats_paloma_zb_mean['B12'],'NDSI':stats_paloma_zb_mean['NDSI'],
-                           'NDSI_MASK':stats_paloma_zb_mean['NDSI_MASK'],'ID':'La Paloma ZB'}
+                           'NDSI_MASK':stats_paloma_zb_mean['NDSI_MASK'],'CLOUD_COVER':stats_paloma_zb_cloud_cover,'ID':'La Paloma ZB',
+                           'GRANULE_ID':MGRS_TILE}
 
     dict_juncal_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_za_mean['B1'],
                            'B02':stats_juncal_za_mean['B2'],'B03':stats_juncal_za_mean['B3'],
@@ -127,7 +129,8 @@ for i in range(0,n):
                            'B08':stats_juncal_za_mean['B8'],'B8A':stats_juncal_za_mean['B8A'],
                            'B09':stats_juncal_za_mean['B9'],'B11':stats_juncal_za_mean['B11'],
                            'B12':stats_juncal_za_mean['B12'],'NDSI':stats_juncal_za_mean['NDSI'],
-                           'NDSI_MASK':stats_juncal_za_mean['NDSI_MASK'],'ID':'Juncal ZA'}
+                           'NDSI_MASK':stats_juncal_za_mean['NDSI_MASK'],'CLOUD_COVER':stats_juncal_za_cloud_cover,'ID':'Juncal ZA',
+                           'GRANULE_ID':MGRS_TILE}
 
     dict_juncal_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_zb_mean['B1'],
                            'B02':stats_juncal_zb_mean['B2'],'B03':stats_juncal_zb_mean['B3'],
@@ -136,7 +139,8 @@ for i in range(0,n):
                            'B08':stats_juncal_zb_mean['B8'],'B8A':stats_juncal_zb_mean['B8A'],
                            'B09':stats_juncal_zb_mean['B9'],'B11':stats_juncal_zb_mean['B11'],
                            'B12':stats_juncal_zb_mean['B12'],'NDSI':stats_juncal_zb_mean['NDSI'],
-                           'NDSI_MASK':stats_juncal_zb_mean['NDSI_MASK'],'ID':'Juncal ZB'}
+                           'NDSI_MASK':stats_juncal_zb_mean['NDSI_MASK'],'CLOUD_COVER':stats_juncal_zb_cloud_cover,'ID':'Juncal ZB',
+                           'GRANULE_ID':MGRS_TILE}
     dict_olivares_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_olivares_za_mean['B1'],
                            'B02':stats_olivares_za_mean['B2'],'B03':stats_olivares_za_mean['B3'],
                            'B04':stats_olivares_za_mean['B4'],'B05':stats_olivares_za_mean['B5'],
@@ -144,7 +148,8 @@ for i in range(0,n):
                            'B08':stats_olivares_za_mean['B8'],'B8A':stats_olivares_za_mean['B8A'],
                            'B09':stats_olivares_za_mean['B9'],'B11':stats_olivares_za_mean['B11'],
                            'B12':stats_olivares_za_mean['B12'],'NDSI':stats_olivares_za_mean['NDSI'],
-                           'NDSI_MASK':stats_olivares_za_mean['NDSI_MASK'],'ID':'Olivares ZA'}
+                           'NDSI_MASK':stats_olivares_za_mean['NDSI_MASK'],'CLOUD_COVER':stats_olivares_za_cloud_cover,'ID':'Olivares ZA',
+                             'GRANULE_ID':MGRS_TILE}
 
     dict_olivares_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,
                              'B01':stats_olivares_zb_mean['B1'],
@@ -154,7 +159,8 @@ for i in range(0,n):
                        'B08':stats_olivares_zb_mean['B8'],'B8A':stats_olivares_zb_mean['B8A'],
                        'B09':stats_olivares_zb_mean['B9'],'B11':stats_olivares_zb_mean['B11'],
                        'B12':stats_olivares_zb_mean['B12'],'NDSI':stats_olivares_zb_mean['NDSI'],
-                       'NDSI_MASK':stats_olivares_zb_mean['NDSI_MASK'],'ID':'Olivares ZB'}
+                       'NDSI_MASK':stats_olivares_zb_mean['NDSI_MASK'],'CLOUD_COVER':stats_olivares_zb_cloud_cover,'ID':'Olivares ZB',
+                             'GRANULE_ID':MGRS_TILE}
 
     df = df.append(dict_paloma_za_mean,ignore_index=True)
     df = df.append(dict_paloma_zb_mean,ignore_index=True)
@@ -176,9 +182,12 @@ for i in range(0,n):
     path_gcloud_ndsimask = (
                 'raster/' + 'BLACK_GLACIER' + '/' + 'ANDES' + '/' + 'NDSI_MASK' + '/' + 'NDSI_MASK' + '_' + 'S2SR' +
                 '_' + MGRS_TILE + '_' + date_yyyymmdd )
-    batch_sr = export_image(S2_SR_img_reflectance,path_gcloud_sr,aoi_export,10,'prod')
-    batch_ndsi = export_image(S2_SR_img_ndsi, path_gcloud_ndsi, aoi_export, 10, 'prod')
-    batch_ndsimask = export_image(S2_SR_img_ndsi_mask, path_gcloud_ndsi, aoi_export, 10, 'prod')
+    batch_sr = export_image(S2_SR_img_reflectance.clip(aoi),path_gcloud_sr,aoi_export,10,'prod')
+    batch_ndsi = export_image(S2_SR_img_ndsi.clip(aoi), path_gcloud_ndsi, aoi_export, 10, 'prod')
+    batch_ndsimask = export_image(S2_SR_img_ndsi_mask.clip(aoi), path_gcloud_ndsi, aoi_export, 10, 'prod')
+    batch_sr.start()
+    batch_ndsi.start()
+    batch_ndsimask.start()
+    df.to_csv(os.getcwd() + '/Time_Series_BG.csv', index=False)
 
-import os
 df.to_csv(os.getcwd()+'/Time_Series_BG.csv',index=False)

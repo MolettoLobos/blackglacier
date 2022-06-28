@@ -246,6 +246,5 @@ for i in range(0,n):
     batch_ndsi.start()
     batch_ndsimask.start()
     df.to_csv(os.getcwd() + '/Time_Series_BG.csv', index=False)
-    print(df)
 
 df.to_csv(os.getcwd()+'/Time_Series_BG.csv',index=False)

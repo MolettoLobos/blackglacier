@@ -2,10 +2,10 @@ import ee
 import pandas as pd
 from datetime import datetime
 import os
+import numpy as np
 from satellite_retrieval.cloudless import get_s2_sr_cld_col
 from areas.geometries import Areas
-
-from export_img import export_image
+from satellite_retrieval.export_img import export_image
 
 aoi = Areas.ae
 aoi_export = aoi.getInfo()['coordinates']
@@ -17,7 +17,7 @@ n_img = 5000
 colList = collection.toList(n_img)
 n = colList.size().getInfo()
 #n=0
-df = pd.DataFrame(columns=['timestamp','ingestion_time','B01','B02','B03','B04','B05','B06','B07',
+df = pd.DataFrame(columns=['timestamp','ingestion_time','SCA','B01','B02','B03','B04','B05','B06','B07',
                            'B08','B8A','B09','B11','B12','NDSI','CLOUD_COVER','ID','GRANULE_ID'])
 for i in range(0,n):
     print('percentage processed: '+str(round(  (i/n)*100,2)))
@@ -35,74 +35,127 @@ for i in range(0,n):
 
     stats_paloma_za_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.la_paloma_za).getInfo()
 
     stats_paloma_zb_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.la_paloma_zb).getInfo()
 
     stats_juncal_za_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.juncal_za).getInfo()
 
     stats_juncal_zb_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.juncal_zb).getInfo()
 
     stats_olivares_za_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.olivares_za).getInfo()
 
     stats_olivares_zb_mean = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.mean(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.olivares_zb).getInfo()
 
 
     #cloud cover retrievals
     stats_paloma_za_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.la_paloma_za).getInfo()
 
     stats_paloma_zb_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.la_paloma_zb).getInfo()
 
     stats_juncal_za_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.juncal_za).getInfo()
 
     stats_juncal_zb_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.juncal_zb).getInfo()
 
     stats_olivares_za_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.olivares_za).getInfo()
 
     stats_olivares_zb_count = S2_SR_img.reduceRegion(
         reducer= ee.Reducer.count(),
-        bestEffort= True,
+        scale=10,
         geometry=Areas.olivares_zb).getInfo()
 
-    stats_paloma_za_cloud_cover = round((1 - (stats_paloma_za_count['B2']/stats_paloma_za_count['cloud_transform']))*100,1)
-    stats_paloma_zb_cloud_cover = round((1 - (stats_paloma_zb_count['B2'] / stats_paloma_zb_count['cloud_transform']))*100,1)
-    stats_juncal_za_cloud_cover = round((1 - (stats_juncal_za_count['B2'] / stats_juncal_za_count['cloud_transform']))*100,1)
-    stats_juncal_zb_cloud_cover = round((1 - (stats_juncal_zb_count['B2'] / stats_juncal_zb_count['cloud_transform']))*100,1)
-    stats_olivares_za_cloud_cover = round((1 - (stats_olivares_za_count['B2'] / stats_olivares_za_count['cloud_transform']))*100,1)
-    stats_olivares_zb_cloud_cover = round((1 - (stats_olivares_zb_count['B2'] / stats_olivares_zb_count['cloud_transform']))*100,1)
+    S2_SR_img = S2_SR_img.addBands([S2_SR_img.select(['B2']).multiply(0).add(1).rename('counter')])
+    #sum
+    stats_paloma_za_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.la_paloma_za).getInfo()
 
-    dict_paloma_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_paloma_za_mean['B1'],
+    stats_paloma_zb_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.la_paloma_zb).getInfo()
+
+    stats_juncal_za_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.juncal_za).getInfo()
+
+    stats_juncal_zb_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.juncal_zb).getInfo()
+
+    stats_olivares_za_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.olivares_za).getInfo()
+
+    stats_olivares_zb_sum = S2_SR_img.select(['NDSI_MASK','counter']).reduceRegion(
+        reducer= ee.Reducer.count(),
+        scale=10,
+        geometry=Areas.olivares_zb).getInfo()
+
+    stats_paloma_za_cloud_cover = round((1 - (stats_paloma_za_sum['counter']/stats_paloma_za_count['cloud_transform']))*100,1)
+    stats_paloma_zb_cloud_cover = round((1 - (stats_paloma_zb_sum['counter'] / stats_paloma_zb_count['cloud_transform']))*100,1)
+    stats_juncal_za_cloud_cover = round((1 - (stats_juncal_za_sum['counter'] / stats_juncal_za_count['cloud_transform']))*100,1)
+    stats_juncal_zb_cloud_cover = round((1 - (stats_juncal_zb_sum['counter'] / stats_juncal_zb_count['cloud_transform']))*100,1)
+    stats_olivares_za_cloud_cover = round((1 - (stats_olivares_za_sum['counter'] / stats_olivares_za_count['cloud_transform']))*100,1)
+    stats_olivares_zb_cloud_cover = round((1 - (stats_olivares_zb_sum['counter'] / stats_olivares_zb_count['cloud_transform']))*100,1)
+
+    area_snow_paloma_za = stats_paloma_za_sum['NDSI_MASK']*(10*10)/10000 #ha
+    area_snow_paloma_zb = stats_paloma_zb_sum['NDSI_MASK']*(10*10)/10000 #ha
+    area_snow_juncal_za = stats_juncal_za_sum['NDSI_MASK']*(10*10)/10000 #ha
+    area_snow_juncal_zb = stats_juncal_zb_sum['NDSI_MASK']*(10*10)/10000 #ha
+    area_snow_olivares_za = stats_olivares_za_sum['NDSI_MASK']*(10*10)/10000 #ha
+    area_snow_olivares_zb = stats_olivares_zb_sum['NDSI_MASK']*(10*10)/10000 #ha
+    if stats_paloma_za_cloud_cover == 100:
+        area_snow_paloma_za = np.nan
+    if stats_paloma_zb_cloud_cover == 100:
+        area_snow_paloma_zb = np.nan
+    if stats_juncal_za_cloud_cover == 100:
+        area_snow_juncal_za = np.nan
+    if stats_juncal_zb_cloud_cover == 100:
+        area_snow_juncal_zb = np.nan
+    if stats_olivares_za_cloud_cover == 100:
+        area_snow_olivares_za = np.nan
+    if stats_olivares_zb_cloud_cover == 100:
+        area_snow_olivares_zb = np.nan
+
+
+    dict_paloma_za_mean = {'ingestion_time':now,'timestamp':date_datetime,
+        'SCA':area_snow_paloma_za,'B01':stats_paloma_za_mean['B1'],
         'B02':stats_paloma_za_mean['B2'],'B03':stats_paloma_za_mean['B3'],
         'B04':stats_paloma_za_mean['B4'],'B05':stats_paloma_za_mean['B5'],
         'B06':stats_paloma_za_mean['B6'],'B07':stats_paloma_za_mean['B7'],
@@ -112,7 +165,8 @@ for i in range(0,n):
         'NDSI_MASK':stats_paloma_za_mean['NDSI_MASK'],'CLOUD_COVER':stats_paloma_za_cloud_cover,'ID':'La Paloma ZA',
                            'GRANULE_ID':MGRS_TILE}
 
-    dict_paloma_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_paloma_zb_mean['B1'],
+    dict_paloma_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,
+                           'SCA':area_snow_paloma_zb,'B01':stats_paloma_zb_mean['B1'],
                            'B02':stats_paloma_zb_mean['B2'],'B03':stats_paloma_zb_mean['B3'],
                            'B04':stats_paloma_zb_mean['B4'],'B05':stats_paloma_zb_mean['B5'],
                            'B06':stats_paloma_zb_mean['B6'],'B07':stats_paloma_zb_mean['B7'],
@@ -122,7 +176,8 @@ for i in range(0,n):
                            'NDSI_MASK':stats_paloma_zb_mean['NDSI_MASK'],'CLOUD_COVER':stats_paloma_zb_cloud_cover,'ID':'La Paloma ZB',
                            'GRANULE_ID':MGRS_TILE}
 
-    dict_juncal_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_za_mean['B1'],
+    dict_juncal_za_mean = {'ingestion_time':now,'timestamp':date_datetime,
+                           'SCA':area_snow_juncal_za,'B01':stats_juncal_za_mean['B1'],
                            'B02':stats_juncal_za_mean['B2'],'B03':stats_juncal_za_mean['B3'],
                            'B04':stats_juncal_za_mean['B4'],'B05':stats_juncal_za_mean['B5'],
                            'B06':stats_juncal_za_mean['B6'],'B07':stats_juncal_za_mean['B7'],
@@ -132,7 +187,8 @@ for i in range(0,n):
                            'NDSI_MASK':stats_juncal_za_mean['NDSI_MASK'],'CLOUD_COVER':stats_juncal_za_cloud_cover,'ID':'Juncal ZA',
                            'GRANULE_ID':MGRS_TILE}
 
-    dict_juncal_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_juncal_zb_mean['B1'],
+    dict_juncal_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,
+                           'SCA':area_snow_juncal_zb,'B01':stats_juncal_zb_mean['B1'],
                            'B02':stats_juncal_zb_mean['B2'],'B03':stats_juncal_zb_mean['B3'],
                            'B04':stats_juncal_zb_mean['B4'],'B05':stats_juncal_zb_mean['B5'],
                            'B06':stats_juncal_zb_mean['B6'],'B07':stats_juncal_zb_mean['B7'],
@@ -141,7 +197,8 @@ for i in range(0,n):
                            'B12':stats_juncal_zb_mean['B12'],'NDSI':stats_juncal_zb_mean['NDSI'],
                            'NDSI_MASK':stats_juncal_zb_mean['NDSI_MASK'],'CLOUD_COVER':stats_juncal_zb_cloud_cover,'ID':'Juncal ZB',
                            'GRANULE_ID':MGRS_TILE}
-    dict_olivares_za_mean = {'ingestion_time':now,'timestamp':date_datetime,'B01':stats_olivares_za_mean['B1'],
+    dict_olivares_za_mean = {'ingestion_time':now,'timestamp':date_datetime,
+                           'SCA':area_snow_olivares_za,'B01':stats_olivares_za_mean['B1'],
                            'B02':stats_olivares_za_mean['B2'],'B03':stats_olivares_za_mean['B3'],
                            'B04':stats_olivares_za_mean['B4'],'B05':stats_olivares_za_mean['B5'],
                            'B06':stats_olivares_za_mean['B6'],'B07':stats_olivares_za_mean['B7'],
@@ -152,7 +209,7 @@ for i in range(0,n):
                              'GRANULE_ID':MGRS_TILE}
 
     dict_olivares_zb_mean = {'ingestion_time':now,'timestamp':date_datetime,
-                             'B01':stats_olivares_zb_mean['B1'],
+                       'SCA':area_snow_olivares_zb,'B01':stats_olivares_zb_mean['B1'],
                        'B02':stats_olivares_zb_mean['B2'],'B03':stats_olivares_zb_mean['B3'],
                        'B04':stats_olivares_zb_mean['B4'],'B05':stats_olivares_zb_mean['B5'],
                        'B06':stats_olivares_zb_mean['B6'],'B07':stats_olivares_zb_mean['B7'],
@@ -189,5 +246,6 @@ for i in range(0,n):
     batch_ndsi.start()
     batch_ndsimask.start()
     df.to_csv(os.getcwd() + '/Time_Series_BG.csv', index=False)
+    print(df)
 
 df.to_csv(os.getcwd()+'/Time_Series_BG.csv',index=False)

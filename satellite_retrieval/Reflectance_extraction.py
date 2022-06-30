@@ -10,17 +10,22 @@ from satellite_retrieval.export_img import export_image
 aoi = Areas.ae
 aoi_export = aoi.getInfo()['coordinates']
 
-start_date = '2018-12-31'
+df = pd.read_csv(os.getcwd()+'/Time_Series_BG.csv')
+df['timestamp'] = pd.to_datetime(df['timestamp'])
+df['ingestion_time'] = pd.to_datetime(df['ingestion_time'])
+start_date = df['timestamp'].max().strftime('%Y-%m-%d')
+
+#start_date = '2018-12-31'
 end_date = '2022-06-20'
 collection = get_s2_sr_cld_col(aoi, start_date, end_date)#.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10))
 n_img = 5000
 colList = collection.toList(n_img)
 n = colList.size().getInfo()
 #n=0
-df = pd.DataFrame(columns=['timestamp','ingestion_time','SCA','B01','B02','B03','B04','B05','B06','B07',
-                           'B08','B8A','B09','B11','B12','NDSI','CLOUD_COVER','ID','GRANULE_ID'])
+#df = pd.DataFrame(columns=['timestamp','ingestion_time','SCA','B01','B02','B03','B04','B05','B06','B07',
+#                           'B08','B8A','B09','B11','B12','NDSI','CLOUD_COVER','ID','GRANULE_ID'])
 for i in range(0,n):
-    print('percentage processed: '+str(round(  (i/n)*100,2)))
+    print('percentage processed: '+str(round(  (i/n)*100,2))+'%')
 
     now = datetime.now()
 

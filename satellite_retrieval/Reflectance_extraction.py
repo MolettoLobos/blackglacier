@@ -16,7 +16,7 @@ df['ingestion_time'] = pd.to_datetime(df['ingestion_time'])
 start_date = df['timestamp'].max().strftime('%Y-%m-%d')
 
 #start_date = '2018-12-31'
-end_date = '2022-06-20'
+end_date = '2022-06-30'
 collection = get_s2_sr_cld_col(aoi, start_date, end_date)#.filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10))
 n_img = 5000
 colList = collection.toList(n_img)

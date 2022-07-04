@@ -289,7 +289,7 @@ def calculate_daily_stats(df):
     df_d_min = df.resample('1D').min()
     df_d_sd = df.resample('1D').std()
 
-    df_d_mean['TX'] = df_d_min['TA']
+    df_d_mean['TX'] = df_d_max['TA']
     df_d_mean['TN'] = df_d_min['TA']
     df_d_mean['RG_SD'] = df_d_sd['RG']
     df_d_mean['RN_SD'] = df_d_sd['RN']

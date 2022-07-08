@@ -250,6 +250,7 @@ for i in range(0,n):
     batch_sr.start()
     batch_ndsi.start()
     batch_ndsimask.start()
+    df['VOLUME'] = (df['SCA'])* ((df['SCA']**0.51402)*0.0465)
     df.to_csv(os.getcwd() + '/Time_Series_BG.csv', index=False)
 
 df.to_csv(os.getcwd()+'/Time_Series_BG.csv',index=False)

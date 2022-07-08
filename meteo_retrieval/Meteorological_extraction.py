@@ -66,6 +66,33 @@ df_daily = pd.concat([df_paloma_za_daily,
                 df_juncal_za_daily,
                 df_olivares_za_daily])
 
+#df=pd.read_csv(os.getcwd()+'/TS_METEO_BG_HOURLY.csv')
+#df_daily=pd.read_csv(os.getcwd()+'/TS_METEO_BG_DAILY.csv')
+#transform WD_string
+df['WD_STR'] = ''
+df['WD_STR'][(df['WD'] >= 0) & (df['WD'] <= 22.5)] = 'N'
+df['WD_STR'][(df['WD'] > 22.5) & (df['WD'] <= 67.5)] = 'NE'
+df['WD_STR'][(df['WD'] > 67.5) & (df['WD'] <= 112.5)] = 'E'
+df['WD_STR'][(df['WD'] > 112.5) & (df['WD'] <= 157.5)] = 'SE'
+df['WD_STR'][(df['WD'] >  157.5) & (df['WD'] <= 202.5)] = 'S'
+
+df['WD_STR'][(df['WD'] >= 202.5) & (df['WD'] <= 247.5)] = 'SO'
+df['WD_STR'][(df['WD'] > 247.5) & (df['WD'] <= 292.5)] = 'O'
+df['WD_STR'][(df['WD'] > 292.5) & (df['WD'] <= 337.5)] = 'NO'
+df['WD_STR'][(df['WD'] > 337.5) & (df['WD'] <= 360)] = 'N'
+
+df_daily['WD_STR'] = ''
+df_daily['WD_STR'][(df_daily['WD'] >= 0) & (df_daily['WD'] <= 22.5)] = 'N'
+df_daily['WD_STR'][(df_daily['WD'] > 22.5) & (df_daily['WD'] <= 67.5)] = 'NE'
+df_daily['WD_STR'][(df_daily['WD'] > 67.5) & (df_daily['WD'] <= 112.5)] = 'E'
+df_daily['WD_STR'][(df_daily['WD'] > 112.5) & (df_daily['WD'] <= 157.5)] = 'SE'
+df_daily['WD_STR'][(df_daily['WD'] >  157.5) & (df_daily['WD'] <= 202.5)] = 'S'
+
+df_daily['WD_STR'][(df_daily['WD'] >= 202.5) & (df_daily['WD'] <= 247.5)] = 'SO'
+df_daily['WD_STR'][(df_daily['WD'] > 247.5) & (df_daily['WD'] <= 292.5)] = 'O'
+df_daily['WD_STR'][(df_daily['WD'] > 292.5) & (df_daily['WD'] <= 337.5)] = 'NO'
+df_daily['WD_STR'][(df_daily['WD'] > 337.5) & (df_daily['WD'] <= 360)] = 'N'
+
 
 df.to_csv(os.getcwd()+'/TS_METEO_BG_HOURLY.csv',index=False)
 df_daily.to_csv(os.getcwd()+'/TS_METEO_BG_DAILY.csv',index=False)

@@ -28,7 +28,7 @@ def get_meteo_sg(date_start='2021-06-01',
                  lat=-33.40,
                  lng=-70.80,
                  elevation=100.0,
-                 api_key='abe46d92-2575-11ec-9b0e-0242ac130002-abe46e14-2575-11ec-9b0e-0242ac130002'):
+                 api_key='yourkey'):
     """
     API	data from
     Weather	2017-01-01
@@ -146,7 +146,7 @@ def get_meteo_sg(date_start='2021-06-01',
     return df
 
 
-def get_elevation(lat, lng, api_key='abe46d92-2575-11ec-9b0e-0242ac130002-abe46e14-2575-11ec-9b0e-0242ac130002'):
+def get_elevation(lat, lng, api_key='yourkey'):
     response = requests.get(
         'https://api.stormglass.io/v2/elevation/point',
         params={

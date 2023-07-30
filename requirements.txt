@@ -1,0 +1,17 @@
+wheel
+pandas
+pydantic
+geemap
+pandas-gbq
+dnspython
+greenlet
+unidecode
+earthengine-api
+google-cloud-storage
+requests
+simplejson
+toolz
+folium
+timezonefinder
+numpy
+rasterio

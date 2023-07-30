@@ -5,10 +5,9 @@
 
 # temporal folder
 tmp/
-auth/
 venv/
 
 ## DO NOT Remove this LINES
 ## Security set up for credentials management
-#apifast/app/src/lib/gcloud/terramodels.json
+auth/terramodels.json
 # .env

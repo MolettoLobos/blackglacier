@@ -22,4 +22,4 @@ Considere que debe tener una key meteorológica de stormglass (https://stormglas
 
 Hay que considerar también que este repositorio funciona con Google Earth Engine. El sistema está hecho para que se utilice un json de service account, ejemplo que se usa en `auth/AuthGee.py`. El json `auth/your.json` debe ser rellenado con la información que obtengas de lo que indica el tutorial oficial de https://developers.google.com/earth-engine/guides/service_account
 
-#ADVERTENCIA: EL ARCHIVO JSON ES UN ARCHIVO SENSIBLE AL USO DE TUS CUENTAS, POR LO QUE PUEDES LIBERAR INFORMACIÓN PERSONAL A OTROS USUARIOS, BAJO NINGÚN MOTIVO SUBAS PÚBLICAMENTE ESA INFORMACIÓN
+# ADVERTENCIA: EL ARCHIVO JSON ES UN ARCHIVO SENSIBLE AL USO DE TUS CUENTAS, POR LO QUE PUEDES LIBERAR INFORMACIÓN PERSONAL A OTROS USUARIOS, BAJO NINGÚN MOTIVO SUBAS PÚBLICAMENTE ESA INFORMACIÓN

@@ -1,4 +1,4 @@
-# BG_ETL
+# Sistema de procesamiento de imágenes satelitales BlackGlacier 1.0
 Repositorio de Black Glacier
 
 ###### Instrucciones para instalación

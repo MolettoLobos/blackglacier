@@ -14,7 +14,7 @@ Una vez instalado, para extraer la reflectancia de los productos ejecute
 ```
 python satellite_retrieval/Reflectance_extraction.py
 ```
-Y para ejecutar la meteorologia, ejecute 
+Y para ejecutar la meteorología, se realiza mediante el código 
 ```
 python meteo_retrieval/stormglass_connection.py
 ```
